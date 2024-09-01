@@ -58,6 +58,7 @@ export default function Index({ auth, projects }) {
                                             </td>
                                             <td className="px-3 py-2">
                                                 <Link
+                                                    preserveScroll
                                                     href={route(
                                                         "projects.edit",
                                                         project.id

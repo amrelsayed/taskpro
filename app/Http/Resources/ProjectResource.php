@@ -17,8 +17,10 @@ class ProjectResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description,
-            'created_at' => $this->created_at->format('Y-m-d'),
+            'description' => $this->whenHas('description'),
+            'created_at' => $this->whenHas('created_at', function () {
+                return $this->created_at->format('Y-m-d');
+            }),
         ];
     }
 }
