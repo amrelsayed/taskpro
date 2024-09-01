@@ -1,0 +1,81 @@
+import Pagination from "@/Components/Pagination";
+import { STATUS, STATUS_COLORS_CLASS } from "@/Constatns";
+import { Link } from "@inertiajs/react";
+
+export default function TasksTable({ tasks }) {
+    return (
+        <>
+            <table className="min-w-full text-left text-sm font-light text-surface">
+                <thead className="border-b border-neutral-200 bg-white font-medium dark:border-white/10 dark:bg-body-dark">
+                    <tr>
+                        <th scope="col" className="px-3 py-2">
+                            #
+                        </th>
+                        <th scope="col" className="px-3 py-2">
+                            Name
+                        </th>
+                        <th scope="col" className="px-3 py-2">
+                            Description
+                        </th>
+                        <th scope="col" className="px-3 py-2">
+                            Status
+                        </th>
+                        <th scope="col" className="px-3 py-2 text-nowrap">
+                            Creation Date
+                        </th>
+                        <th scope="col" className="px-3 py-2">
+                            Project
+                        </th>
+                        <th scope="col" className="px-3 py-2">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tasks.data.map((task) => (
+                        <tr
+                            key={task.id}
+                            className="border-b border-neutral-200 dark:border-white/10"
+                        >
+                            <td className="px-3 py-2">{task.id}</td>
+                            <td className="px-3 py-2">{task.name}</td>
+                            <td className="px-3 py-2">{task.description}</td>
+                            <td className="px-3 py-2">
+                                <span
+                                    className={
+                                        "px-3 py-1 rounded text-white " +
+                                        STATUS_COLORS_CLASS[task.status]
+                                    }
+                                >
+                                    {STATUS[task.status]}
+                                </span>
+                            </td>
+                            <td className="px-3 py-2">{task.created_at}</td>
+                            <td className="px-3 py-2">{task.project.name}</td>
+                            <td className="px-3 py-2">
+                                <Link
+                                    preserveScroll
+                                    href={route("tasks.edit", task.id)}
+                                    className="text-blue-500"
+                                >
+                                    Edit
+                                </Link>
+
+                                <Link
+                                    href={route("tasks.destroy", task.id)}
+                                    className="ml-2 text-red-500"
+                                >
+                                    Delete
+                                </Link>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {/* render pagination only if we have more than 1 page */}
+            {tasks.meta.total > tasks.meta.per_page && (
+                <Pagination links={tasks.meta.links} />
+            )}
+        </>
+    );
+}

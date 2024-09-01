@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
+use App\Http\Resources\TaskResource;
 use App\Models\Project;
 use Inertia\Inertia;
 
@@ -45,7 +46,14 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        $query = $project->tasks();
+
+        $tasks = $query->with('project:id,name')->paginate(10);
+
+        return Inertia::render('Projects/Show', [
+            'project' => new ProjectResource($project->loadCount('tasks')),
+            'tasks' => TaskResource::collection($tasks),
+        ]);
     }
 
     /**

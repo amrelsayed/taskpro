@@ -30,10 +30,16 @@ export default function Index({ auth, projects }) {
                                         <th scope="col" className="px-3 py-2">
                                             Description
                                         </th>
-                                        <th scope="col" className="px-3 py-2">
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-2 text-nowrap"
+                                        >
                                             Creation Date
                                         </th>
-                                        <th scope="col" className="px-3 py-2">
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-2 text-nowrap"
+                                        >
                                             Tasks Count
                                         </th>
                                         <th scope="col" className="px-3 py-2">
@@ -50,16 +56,24 @@ export default function Index({ auth, projects }) {
                                             <td className="px-3 py-2">
                                                 {project.id}
                                             </td>
-                                            <td className="px-3 py-2">
-                                                {project.name}
+                                            <td className="px-3 py-2 ">
+                                                <Link
+                                                    href={route(
+                                                        "projects.show",
+                                                        project.id
+                                                    )}
+                                                    className="hover:underline text-violet-600 text-nowrap"
+                                                >
+                                                    {project.name}
+                                                </Link>
                                             </td>
                                             <td className="px-3 py-2">
                                                 {project.description}
                                             </td>
-                                            <td className="px-3 py-2">
+                                            <td className="px-3 py-2 text-nowrap">
                                                 {project.created_at}
                                             </td>
-                                            <td className="px-3 py-2">
+                                            <td className="px-3 py-2 text-center">
                                                 {project.tasksCount}
                                             </td>
                                             <td className="px-3 py-2">
