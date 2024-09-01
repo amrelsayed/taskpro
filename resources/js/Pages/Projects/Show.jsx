@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import TasksTable from "../Tasks/TasksTable";
 
 export default function Show({ auth, project, tasks }) {

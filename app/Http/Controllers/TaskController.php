@@ -19,7 +19,7 @@ class TaskController extends Controller
 
         $tasks = $query->with('project:id,name')->paginate(10);
 
-        return Inertia::render('Tasks/index', [
+        return Inertia::render('Tasks/Index', [
             'tasks' => TaskResource::collection($tasks)
         ]);
     }

@@ -20,8 +20,9 @@ class ProjectController extends Controller
 
         $projects = $query->withCount('tasks')->paginate(10);
 
-        return Inertia::render('Projects/index', [
-            'projects' => ProjectResource::collection($projects)
+        return Inertia::render('Projects/Index', [
+            'projects' => ProjectResource::collection($projects),
+            'success' => session('success')
         ]);
     }
 
@@ -30,7 +31,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("Projects/Create");
     }
 
     /**
@@ -38,7 +39,11 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        Project::create($data);
+
+        return to_route('projects.index')->with('success', 'Project created');
     }
 
     /**

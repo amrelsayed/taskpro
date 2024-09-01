@@ -2,20 +2,33 @@ import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 
-export default function Index({ auth, projects }) {
+export default function Index({ auth, projects, success }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Projects
-                </h2>
+                <div className="flex justify-between items-center">
+                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                        Projects
+                    </h2>
+                    <Link
+                        className="py-1 px-3 bg-teal-500 rounded text-white"
+                        href={route("projects.create")}
+                    >
+                        Add New Project
+                    </Link>
+                </div>
             }
         >
             <Head title="Projects" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    {success && (
+                        <div className="mb-5 bg-lime-400 py-1 px-4 text-white rounded">
+                            {success}
+                        </div>
+                    )}
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
                             <table className="min-w-full text-left text-sm font-light text-surface">
