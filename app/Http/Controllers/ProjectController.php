@@ -17,7 +17,7 @@ class ProjectController extends Controller
     {
         $query = Project::query();
 
-        $projects = $query->paginate(10);
+        $projects = $query->withCount('tasks')->paginate(10);
 
         return Inertia::render('Projects/index', [
             'projects' => ProjectResource::collection($projects)

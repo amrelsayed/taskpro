@@ -21,6 +21,7 @@ class ProjectResource extends JsonResource
             'created_at' => $this->whenHas('created_at', function () {
                 return $this->created_at->format('Y-m-d');
             }),
+            'tasksCount' => $this->whenHas('tasks_count'),
         ];
     }
 }

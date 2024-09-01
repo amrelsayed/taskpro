@@ -34,6 +34,9 @@ export default function Index({ auth, projects }) {
                                             Creation Date
                                         </th>
                                         <th scope="col" className="px-3 py-2">
+                                            Tasks Count
+                                        </th>
+                                        <th scope="col" className="px-3 py-2">
                                             Actions
                                         </th>
                                     </tr>
@@ -55,6 +58,9 @@ export default function Index({ auth, projects }) {
                                             </td>
                                             <td className="px-3 py-2">
                                                 {project.created_at}
+                                            </td>
+                                            <td className="px-3 py-2">
+                                                {project.tasksCount}
                                             </td>
                                             <td className="px-3 py-2">
                                                 <Link
