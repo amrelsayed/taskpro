@@ -1,8 +1,14 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 
 export default function Index({ auth, projects, success }) {
+    const deleteProject = (project) => {
+        if (!window.confirm("Are you sure you want to delete this project?")) {
+            return;
+        }
+        router.delete(route("projects.destroy", project));
+    };
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -101,15 +107,14 @@ export default function Index({ auth, projects, success }) {
                                                     Edit
                                                 </Link>
 
-                                                <Link
-                                                    href={route(
-                                                        "projects.destroy",
-                                                        project.id
-                                                    )}
+                                                <button
+                                                    onClick={() =>
+                                                        deleteProject(project)
+                                                    }
                                                     className="ml-2 text-red-500"
                                                 >
                                                     Delete
-                                                </Link>
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}
