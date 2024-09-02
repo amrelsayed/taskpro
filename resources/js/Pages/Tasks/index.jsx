@@ -1,8 +1,9 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import TasksTable from "./TasksTable";
+import TasksFilter from "./TasksFilter";
 
-export default function Index({ auth, tasks }) {
+export default function Index({ auth, tasks, queryParams = null }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -21,6 +22,8 @@ export default function Index({ auth, tasks }) {
             }
         >
             <Head title="Tasks" />
+
+            <TasksFilter queryParams={queryParams} />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
