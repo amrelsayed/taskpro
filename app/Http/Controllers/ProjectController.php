@@ -52,11 +52,20 @@ class ProjectController extends Controller
     {
         $query = $project->tasks();
 
+        if (request('name')) {
+            $query->where('name', 'like', '%' . request('name') . '%');
+        }
+
+        if (request('status')) {
+            $query->where('status', request('status'));
+        }
+
         $tasks = $query->with('project:id,name')->paginate(10);
 
         return Inertia::render('Projects/Show', [
             'project' => new ProjectResource($project->loadCount('tasks')),
             'tasks' => TaskResource::collection($tasks),
+            'queryParams' => !empty(request()->query()) ? request()->query() : null
         ]);
     }
 

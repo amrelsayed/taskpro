@@ -3,7 +3,7 @@ import TextInput from "@/Components/TextInput";
 import { DONE, INPROGRESS, INREVIEW, STATUS, TESTING, TODO } from "@/Constatns";
 import { router } from "@inertiajs/react";
 
-export default function TasksFilter({ queryParams }) {
+export default function TasksFilter({ queryParams, project = null }) {
     queryParams = queryParams || {};
 
     const searchHandler = (name, value) => {
@@ -12,8 +12,13 @@ export default function TasksFilter({ queryParams }) {
         } else {
             delete queryParams[name];
         }
-        console.log(queryParams);
-        router.get(route("tasks.index", queryParams));
+
+        if (project) {
+            queryParams["project"] = project;
+            router.get(route("projects.show", queryParams));
+        } else {
+            router.get(route("tasks.index", queryParams));
+        }
     };
 
     const onKeyPress = (name, e) => {
@@ -46,7 +51,7 @@ export default function TasksFilter({ queryParams }) {
                                     }
                                     className="mt-1 block w-full"
                                 >
-                                    <option>Filter by Status</option>
+                                    <option value="">Filter by Status</option>
                                     <option value={TODO}>{STATUS[TODO]}</option>
                                     <option value={INPROGRESS}>
                                         {STATUS[INPROGRESS]}

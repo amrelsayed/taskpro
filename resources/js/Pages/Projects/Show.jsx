@@ -1,8 +1,9 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import TasksTable from "../Tasks/TasksTable";
+import TasksFilter from "../Tasks/TasksFilter";
 
-export default function Show({ auth, project, tasks }) {
+export default function Show({ auth, project, tasks, queryParams = null }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -52,8 +53,14 @@ export default function Show({ auth, project, tasks }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <h2 className="mb-2 text-lg">Tasks:</h2>
+                            <h2 className="-mb-8 text-lg text-pretty">
+                                Project Tasks:
+                            </h2>
 
+                            <TasksFilter
+                                project={project}
+                                queryParams={queryParams}
+                            />
                             <TasksTable tasks={tasks} />
                         </div>
                     </div>
