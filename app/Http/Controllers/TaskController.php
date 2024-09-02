@@ -7,12 +7,8 @@ use App\Actions\Task\CreateTaskAction;
 use App\Actions\Task\DeleteTaskAction;
 use App\Actions\Task\ListTasksAction;
 use App\Actions\Task\UpdateTaskAction;
-use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\TaskRequest;
-use App\Http\Requests\UpdateTaskRequest;
-use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
-use App\Models\Project;
 use App\Models\Task;
 use Inertia\Inertia;
 

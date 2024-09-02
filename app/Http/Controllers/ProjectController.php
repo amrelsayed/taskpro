@@ -9,7 +9,6 @@ use App\Actions\Project\UpdateProjectAction;
 use App\Actions\Task\ListTasksAction;
 use App\Http\Requests\ProjectRequest;
 use App\Http\Resources\ProjectResource;
-use App\Http\Resources\TaskResource;
 use App\Models\Project;
 use Inertia\Inertia;
 
