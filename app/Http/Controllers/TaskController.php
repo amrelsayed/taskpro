@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Project\ListProjectsAction;
+use App\Actions\Task\CreateTaskAction;
+use App\Actions\Task\DeleteTaskAction;
+use App\Actions\Task\ListTasksAction;
+use App\Actions\Task\UpdateTaskAction;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\TaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -16,22 +21,12 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(ListTasksAction $listTasksAction)
     {
-        $query = Task::query();
-
-        if (request('name')) {
-            $query->where('name', 'like', '%' . request('name') . '%');
-        }
-
-        if (request('status')) {
-            $query->where('status', request('status'));
-        }
-
-        $tasks = $query->with('project:id,name')->paginate(10);
+        $tasks = $listTasksAction->execute();
 
         return Inertia::render('Tasks/Index', [
-            'tasks' => TaskResource::collection($tasks),
+            'tasks' => $tasks,
             'queryParams' => !empty(request()->query()) ? request()->query() : null
         ]);
     }
@@ -39,23 +34,21 @@ class TaskController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(ListProjectsAction $listProjectsAction)
     {
-        $projects = Project::all();
+        $projects = $listProjectsAction->execute(false);
 
         return Inertia::render("Tasks/Create", [
-            'projects' => ProjectResource::collection($projects),
+            'projects' => $projects,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TaskRequest $request)
+    public function store(TaskRequest $request, CreateTaskAction $createTaskAction)
     {
-        $data = $request->validated();
-
-        Task::create($data);
+        $createTaskAction->execute($request->validated());
 
         return to_route('tasks.index')->with('success', 'Task created');
     }
@@ -71,22 +64,22 @@ class TaskController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Task $task)
+    public function edit(Task $task, ListProjectsAction $listProjectsAction)
     {
-        $projects = Project::all();
+        $projects = $listProjectsAction->execute(false);
 
         return Inertia::render('Tasks/Edit', [
             'task' => new TaskResource($task),
-            'projects' => ProjectResource::collection($projects)
+            'projects' => $projects
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(TaskRequest $request, Task $task)
+    public function update(TaskRequest $request, Task $task, UpdateTaskAction $updateTaskAction)
     {
-        $task->update($request->validated());
+        $updateTaskAction->execute($task, $request->validated());
 
         return to_route('tasks.index')->with('success', "Task \"$task->name\" updated");
     }
@@ -94,11 +87,11 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
+    public function destroy(Task $task, DeleteTaskAction $deleteTaskAction)
     {
         $name = $task->name;
 
-        $task->delete();
+        $deleteTaskAction->execute($task);
 
         return to_route('tasks.index')->with('success', "Task \"$name\" deleted");
     }

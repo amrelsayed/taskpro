@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Project\CreateProjectAction;
+use App\Actions\Project\DeleteProjectAction;
+use App\Actions\Project\ListProjectsAction;
+use App\Actions\Project\UpdateProjectAction;
+use App\Actions\Task\ListTasksAction;
 use App\Http\Requests\ProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
@@ -13,14 +18,12 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(ListProjectsAction $listProjectsAction)
     {
-        $query = Project::query();
-
-        $projects = $query->withCount('tasks')->paginate(10);
+        $projects = $listProjectsAction->execute();
 
         return Inertia::render('Projects/Index', [
-            'projects' => ProjectResource::collection($projects),
+            'projects' => $projects,
             'success' => session('success')
         ]);
     }
@@ -36,11 +39,9 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProjectRequest $request)
+    public function store(ProjectRequest $request, CreateProjectAction $createProjectAction)
     {
-        $data = $request->validated();
-
-        Project::create($data);
+        $createProjectAction->execute($request->validated());
 
         return to_route('projects.index')->with('success', 'Project created');
     }
@@ -48,23 +49,13 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Project $project)
+    public function show(Project $project, ListTasksAction $listTasksAction)
     {
-        $query = $project->tasks();
-
-        if (request('name')) {
-            $query->where('name', 'like', '%' . request('name') . '%');
-        }
-
-        if (request('status')) {
-            $query->where('status', request('status'));
-        }
-
-        $tasks = $query->with('project:id,name')->paginate(10);
+        $tasks = $listTasksAction->execute($project->tasks());
 
         return Inertia::render('Projects/Show', [
             'project' => new ProjectResource($project->loadCount('tasks')),
-            'tasks' => TaskResource::collection($tasks),
+            'tasks' => $tasks,
             'queryParams' => !empty(request()->query()) ? request()->query() : null
         ]);
     }
@@ -82,9 +73,9 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProjectRequest $request, Project $project)
+    public function update(ProjectRequest $request, Project $project, UpdateProjectAction $updateProjectAction)
     {
-        $project->update($request->validated());
+        $updateProjectAction->execute($project, $request->validated());
 
         return to_route('projects.index')->with('success', "Project \"$project->name\" updated");
     }
@@ -92,11 +83,11 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project)
+    public function destroy(Project $project, DeleteProjectAction $deleteProjectAction)
     {
         $name = $project->name;
 
-        $project->delete();
+        $deleteProjectAction->execute($project);
 
         return to_route('projects.index')->with('success', "Project \"$name\" deleted");
     }
