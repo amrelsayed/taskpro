@@ -31,7 +31,7 @@ export default function Index({ auth, projects, success }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     {success && (
-                        <div className="mb-5 bg-lime-400 py-1 px-4 text-white rounded">
+                        <div className="mb-5 bg-emerald-200 py-3 px-4 text-gray-600 rounded">
                             {success}
                         </div>
                     )}
@@ -95,12 +95,11 @@ export default function Index({ auth, projects, success }) {
                                             <td className="px-3 py-2 text-center">
                                                 {project.tasksCount}
                                             </td>
-                                            <td className="px-3 py-2">
+                                            <td className="px-3 py-2 text-nowrap">
                                                 <Link
-                                                    preserveScroll
                                                     href={route(
                                                         "projects.edit",
-                                                        project.id
+                                                        project
                                                     )}
                                                     className="text-blue-500"
                                                 >

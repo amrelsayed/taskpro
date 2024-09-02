@@ -5,18 +5,18 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import TextArea from "@/Components/TextArea";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, useForm } from "@inertiajs/react";
 
-export default function Create({ auth }) {
-    const { data, setData, post, errors, reset } = useForm({
-        name: "",
-        description: "",
+export default function Edit({ auth, project }) {
+    const { data, setData, patch, errors, reset } = useForm({
+        name: project.name,
+        description: project.description,
     });
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
 
-        post(route("projects.store", data));
+        patch(route("projects.update", project.id));
     };
 
     return (
@@ -24,11 +24,11 @@ export default function Create({ auth }) {
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Create New Project
+                    Edit Project "{project.name}"
                 </h2>
             }
         >
-            <Head title="create project" />
+            <Head title="edit project" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -76,7 +76,7 @@ export default function Create({ auth }) {
                                         className="mt-2"
                                     />
                                 </div>
-                                <div className="mt-4 text-right">
+                                <div className="mt-6 text-right">
                                     <SecondaryButton
                                         onClick={() => window.history.back()}
                                         className="mr-2"

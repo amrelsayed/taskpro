@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProjectRequest;
-use App\Http\Requests\UpdateProjectRequest;
+use App\Http\Requests\ProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
 use App\Models\Project;
@@ -37,7 +36,7 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectRequest $request)
+    public function store(ProjectRequest $request)
     {
         $data = $request->validated();
 
@@ -66,15 +65,19 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return Inertia::render('Projects/Edit', [
+            'project' => new ProjectResource($project),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProjectRequest $request, Project $project)
+    public function update(ProjectRequest $request, Project $project)
     {
-        //
+        $project->update($request->validated());
+
+        return to_route('projects.index')->with('success', "Project \"$project->name\" updated");
     }
 
     /**
