@@ -64,15 +64,22 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        $projects = Project::all();
+
+        return Inertia::render('Tasks/Edit', [
+            'task' => new TaskResource($task),
+            'projects' => ProjectResource::collection($projects)
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, Task $task)
+    public function update(TaskRequest $request, Task $task)
     {
-        //
+        $task->update($request->validated());
+
+        return to_route('tasks.index')->with('success', "Task \"$task->name\" updated");
     }
 
     /**
@@ -80,6 +87,10 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $name = $task->name;
+
+        $task->delete();
+
+        return to_route('tasks.index')->with('success', "Task \"$name\" deleted");
     }
 }

@@ -1,8 +1,15 @@
 import Pagination from "@/Components/Pagination";
 import { STATUS, STATUS_COLORS_CLASS } from "@/Constatns";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 
 export default function TasksTable({ tasks }) {
+    const deleteTask = (task) => {
+        if (!window.confirm("Are you sure you want to delete this task?")) {
+            return;
+        }
+        router.delete(route("tasks.destroy", task));
+    };
+
     return (
         <>
             <table className="min-w-full text-left text-sm font-light text-surface">
@@ -52,7 +59,7 @@ export default function TasksTable({ tasks }) {
                             </td>
                             <td className="px-3 py-2">{task.created_at}</td>
                             <td className="px-3 py-2">{task.project.name}</td>
-                            <td className="px-3 py-2">
+                            <td className="px-3 py-2 text-nowrap">
                                 <Link
                                     preserveScroll
                                     href={route("tasks.edit", task.id)}
@@ -61,12 +68,12 @@ export default function TasksTable({ tasks }) {
                                     Edit
                                 </Link>
 
-                                <Link
-                                    href={route("tasks.destroy", task.id)}
+                                <button
+                                    onClick={() => deleteTask(task)}
                                     className="ml-2 text-red-500"
                                 >
                                     Delete
-                                </Link>
+                                </button>
                             </td>
                         </tr>
                     ))}
