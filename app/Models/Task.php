@@ -14,6 +14,7 @@ class Task extends Model
         'name',
         'description',
         'status',
+        'project_id'
     ];
 
     const TODO_STATUS = 'todo';

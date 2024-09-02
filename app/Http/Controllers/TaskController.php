@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\TaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Resources\ProjectResource;
 use App\Http\Resources\TaskResource;
+use App\Models\Project;
 use App\Models\Task;
 use Inertia\Inertia;
 
@@ -29,15 +32,23 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        $projects = Project::all();
+
+        return Inertia::render("Tasks/Create", [
+            'projects' => ProjectResource::collection($projects),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTaskRequest $request)
+    public function store(TaskRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        Task::create($data);
+
+        return to_route('tasks.index')->with('success', 'Task created');
     }
 
     /**

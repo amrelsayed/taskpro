@@ -1,22 +1,27 @@
+import Dropdown from "@/Components/Dropdown";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
+import SelectInput from "@/Components/SelectInput";
 import TextArea from "@/Components/TextArea";
 import TextInput from "@/Components/TextInput";
+import { DONE, INPROGRESS, INREVIEW, STATUS, TESTING, TODO } from "@/Constatns";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
 
-export default function Create({ auth }) {
+export default function Create({ auth, projects }) {
     const { data, setData, post, errors, reset } = useForm({
         name: "",
         description: "",
+        status: "",
+        project_id: "",
     });
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
 
-        post(route("projects.store", data));
+        post(route("tasks.store", data));
     };
 
     return (
@@ -24,11 +29,11 @@ export default function Create({ auth }) {
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Create New Project
+                    Create New Task
                 </h2>
             }
         >
-            <Head title="create project" />
+            <Head title="create task" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -73,6 +78,72 @@ export default function Create({ auth }) {
                                     ></TextArea>
                                     <InputError
                                         message={errors.description}
+                                        className="mt-2"
+                                    />
+                                </div>
+                                <div className="mt-4">
+                                    <InputLabel
+                                        value="Status: "
+                                        htmlFor="status"
+                                    />
+                                    <SelectInput
+                                        id="status"
+                                        name="status"
+                                        onChange={(e) =>
+                                            setData("status", e.target.value)
+                                        }
+                                        className="mt-1 block w-full"
+                                    >
+                                        <option>Select Status</option>
+                                        <option value={TODO}>
+                                            {STATUS[TODO]}
+                                        </option>
+                                        <option value={INPROGRESS}>
+                                            {STATUS[INPROGRESS]}
+                                        </option>
+                                        <option value={INREVIEW}>
+                                            {STATUS[INREVIEW]}
+                                        </option>
+                                        <option value={TESTING}>
+                                            {STATUS[TESTING]}
+                                        </option>
+                                        <option value={DONE}>
+                                            {STATUS[DONE]}
+                                        </option>
+                                    </SelectInput>
+                                    <InputError
+                                        message={errors.status}
+                                        className="mt-2"
+                                    />
+                                </div>
+                                <div className="mt-4">
+                                    <InputLabel
+                                        value="Project: "
+                                        htmlFor="project_id"
+                                    />
+                                    <SelectInput
+                                        id="project_id"
+                                        name="project_id"
+                                        onChange={(e) =>
+                                            setData(
+                                                "project_id",
+                                                e.target.value
+                                            )
+                                        }
+                                        className="mt-1 block w-full"
+                                    >
+                                        <option>Select Project</option>
+                                        {projects.data.map((project) => (
+                                            <option
+                                                key={project.id}
+                                                value={project.id}
+                                            >
+                                                {project.name}
+                                            </option>
+                                        ))}
+                                    </SelectInput>
+                                    <InputError
+                                        message={errors.project_id}
                                         className="mt-2"
                                     />
                                 </div>

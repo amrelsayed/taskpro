@@ -1,5 +1,3 @@
-import Pagination from "@/Components/Pagination";
-import { STATUS, STATUS_COLORS_CLASS } from "@/Constatns";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import TasksTable from "./TasksTable";
@@ -9,9 +7,17 @@ export default function Index({ auth, tasks }) {
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Tasks
-                </h2>
+                <div className="flex justify-between items-center">
+                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                        Tasks
+                    </h2>
+                    <Link
+                        className="py-1 px-3 bg-teal-500 rounded text-white"
+                        href={route("tasks.create")}
+                    >
+                        Add New Task
+                    </Link>
+                </div>
             }
         >
             <Head title="Tasks" />
