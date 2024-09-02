@@ -12,7 +12,7 @@ By using Composer, you have to have php, and composer installed locally, npm as 
 And MySql if you want to use it or you can just juse sqlite database.
 
 You can run `composer install` to install php packages
-`npm install` for node packages
+`npm install` for node packages and `npm run build` to build assests
 
 Then copy .env.example and update it with your own settings `cp .env.example .env`
 
@@ -31,4 +31,4 @@ By using Docker
 
 You can run `docker-compose up`
 
-Than run the previous commands prefixed with `./vendor/bin/sail `
+Then run the previous commands prefixed with `./vendor/bin/sail `
